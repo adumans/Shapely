@@ -55,7 +55,7 @@ ax = fig.add_subplot(222)
 patch2a = PolygonPatch(dilated1, fc=GRAY, ec=GRAY, alpha=0.5, zorder=1)
 #ax.add_patch(patch2a)
 
-eroded = dilated1.buffer(-0.6)
+eroded = dilated1.buffer(-0.1)
 
 # GeoJSON-like data works as well
 
