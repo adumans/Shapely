@@ -31,7 +31,7 @@ print(dilated)
 
 ax.set_title('a) dilation, cap_style=3')
 
-set_limits(ax, -1, 15, -1, 5)
+#set_limits(ax, -1, 15, -1, 5)
 
 # 1
 '''
@@ -72,7 +72,7 @@ print(len(polygon['coordinates'][1]))
 
 ax.set_title('b) erosion, join_style=1')
 
-set_limits(ax, -1, 15, -1, 5)
+#set_limits(ax, -1, 15, -1, 5)
 
 # 3
 ax = fig.add_subplot(223)
@@ -81,7 +81,7 @@ polygon3 = Polygon(polygon['coordinates'][0])
 patch3 = PolygonPatch(polygon3, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
 ax.add_patch(patch3)
 ax.set_title('c) erosion[exterior]')
-set_limits(ax, -1, 15, -1, 5)
+#set_limits(ax, -1, 15, -1, 5)
 
 # 4
 ax = fig.add_subplot(224)

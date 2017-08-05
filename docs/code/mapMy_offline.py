@@ -5,13 +5,18 @@ from descartes import PolygonPatch
 from figures import SIZE, BLUE, GRAY, RED, set_limits, plot_line
 import json
 MyApi = OsmApi()
-types = ['motorway', 'trunk', 'primary', 'trunk_link', 'motorway_link', 'primary_link', 'traffic_signals', 'bus_stop']
+types = ['motorway', 'trunk', 'primary', 'secondary', 'trunk_link', 'motorway_link', 'primary_link', 'tertiary_link', 'traffic_signals', 'bus_stop']
 print ('start collecting map ...')
-MINLON = 116.3781
-MINLAT = 39.9842
-MAXLON = 116.4175
-MAXLAT = 40.0030
 
+MINLON = 116.2992
+MINLAT = 39.9005
+MAXLON = 116.3555
+MAXLAT = 39.9445
+
+# MINLON = 116.3666
+# MINLAT = 39.9623
+# MAXLON = 116.4469
+# MAXLAT = 39.9937
 
 map0 = MyApi.Map(MINLON, MINLAT, MAXLON, MAXLAT)
 #map0 = MyApi.Map(116.34384,39.98189,116.34691,39.98352)
@@ -69,7 +74,7 @@ for item in map0:
                 waylist.append(oneway)
 print ('data processing end!')
 #plot
-fig = pyplot.figure(1, figsize=SIZE, dpi=90)
+fig = pyplot.figure(1, figsize=SIZE, dpi=150)
 ax0 = fig.add_subplot(121)
 #dilatedAll = Polygon()
 
@@ -97,7 +102,7 @@ for oneway in waylist:
     if str(oneway['wayid']) in wayselected:
         points = oneway['nodeslocation']
         line = LineString(points)
-        dilated = line.buffer(0.0003, cap_style=3)
+        dilated = line.buffer(0.0009, cap_style=3)
         dilatedAll = dilatedAll.union(dilated)
         plot_line(ax0, line)
 patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
@@ -105,7 +110,7 @@ patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
 print ('dilation done!')
 
 ax1 = fig.add_subplot(122)
-eroded = dilatedAll.buffer(-0)
+eroded = dilatedAll.buffer(-0.00000001)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)
@@ -114,8 +119,7 @@ print ('start ploting...')
 set_limits(ax1, 116,119,39,42)
 pyplot.show()
 
-
-
+print ('all done !')
 # for d in waylist:
 #     f= open('map_dict', 'a')
 #     json.dump(d,f)
