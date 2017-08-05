@@ -18,8 +18,8 @@ ax = fig.add_subplot(221)
 plot_line(ax, line1)
 plot_line(ax, line2)
 
-dilated1 = line1.buffer(0.9, cap_style=3)
-dilated2 = line2.buffer(0.9, cap_style=3)
+dilated1 = line1.buffer(0.7, cap_style=3)
+dilated2 = line2.buffer(0.7, cap_style=3)
 dilated1 = dilated1.union(dilated2)
 
 patch1 = PolygonPatch(dilated1, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
@@ -55,7 +55,7 @@ ax = fig.add_subplot(222)
 patch2a = PolygonPatch(dilated1, fc=GRAY, ec=GRAY, alpha=0.5, zorder=1)
 #ax.add_patch(patch2a)
 
-eroded = dilated1.buffer(-0.1)
+eroded = dilated1.buffer(-0.5)
 
 # GeoJSON-like data works as well
 

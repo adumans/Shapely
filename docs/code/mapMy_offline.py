@@ -43,30 +43,30 @@ for item in map0:
             if item['data']['tag']['highway'] in types:
                 wayselected.append(str(oneway['wayid']))
                 wayselected.append(item['data']['tag']['highway'])
-        for nodeid in item['data']['nd']:
-            strid = str(nodeid)
-            nodexy = [0.0,0.0]
-            #if nodesinfo[strid][0] >= MINLAT and nodesinfo[strid][0] <= MAXLAT and nodesinfo[strid][1] >= MINLON and nodesinfo[strid][1] <= MAXLON:
-            nodeids.append(nodeid)
-            #if MyApi.NodeGet(nodeid)['tag']
-            nodexy[0] = nodesinfo[strid][1]
-            nodexy[1] = nodesinfo[strid][0]
-            nodexy = tuple(nodexy)
-            nodeslocation.append(nodexy)
+                for nodeid in item['data']['nd']:
+                    strid = str(nodeid)
+                    nodexy = [0.0,0.0]
+                    #if nodesinfo[strid][0] >= MINLAT and nodesinfo[strid][0] <= MAXLAT and nodesinfo[strid][1] >= MINLON and nodesinfo[strid][1] <= MAXLON:
+                    nodeids.append(nodeid)
+                    #if MyApi.NodeGet(nodeid)['tag']
+                    nodexy[0] = nodesinfo[strid][1]
+                    nodexy[1] = nodesinfo[strid][0]
+                    nodexy = tuple(nodexy)
+                    nodeslocation.append(nodexy)
 
-            if nodexy[1] >= MAXLAT:
-                MAXLAT = nodexy[1]
-            if nodexy[1] <= MINLAT:
-                MINLAT = nodexy[1]
-            if nodexy[0] >= MAXLON:
-                MAXLON = nodexy[0]
-            if nodexy[0] <= MINLON:
-                MINLON = nodexy[0]
+                    if nodexy[1] >= MAXLAT:
+                        MAXLAT = nodexy[1]
+                    if nodexy[1] <= MINLAT:
+                        MINLAT = nodexy[1]
+                    if nodexy[0] >= MAXLON:
+                        MAXLON = nodexy[0]
+                    if nodexy[0] <= MINLON:
+                        MINLON = nodexy[0]
 
-        oneway['nodeids'] = nodeids
-        nodeslocation = tuple(nodeslocation)
-        oneway['nodeslocation'] = nodeslocation
-        waylist.append(oneway)
+                oneway['nodeids'] = nodeids
+                nodeslocation = tuple(nodeslocation)
+                oneway['nodeslocation'] = nodeslocation
+                waylist.append(oneway)
 print ('data processing end!')
 #plot
 fig = pyplot.figure(1, figsize=SIZE, dpi=90)
@@ -101,14 +101,14 @@ for oneway in waylist:
         dilatedAll = dilatedAll.union(dilated)
         plot_line(ax0, line)
 patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
-ax0.add_patch(patch)
+#ax0.add_patch(patch)
 print ('dilation done!')
 
 ax1 = fig.add_subplot(122)
-# eroded = dilatedAll.buffer(-0.005)
-# polygon = eroded.__geo_interface__
-# patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
-# ax1.add_patch(patch2)
+eroded = dilatedAll.buffer(-0)
+polygon = eroded.__geo_interface__
+patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
+ax1.add_patch(patch2)
 print ('eroded done!')
 print ('start ploting...')
 set_limits(ax1, 116,119,39,42)
