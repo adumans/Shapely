@@ -30,8 +30,8 @@ for i in range(0, 8):
     MAXLAT_1 = round(MAXLAT1 + i * addedlat, 4)
     print('start collecting map%d  ...' %(i+1))
     print(MINLON_1, MINLAT_1, MAXLON_1, MAXLAT_1)
-    # map1 = MyApi.Map(MINLON_1, MINLAT_1, MAXLON_1, MAXLAT_1)
-    # map0.extend(map1)
+    map1 = MyApi.Map(MINLON_1, MINLAT_1, MAXLON_1, MAXLAT_1)
+    map0.extend(map1)
     if MAXLAT_1 >= MAXLAT:
         MAXLAT = MAXLAT_1
     if MINLAT_1 <= MINLAT:
@@ -50,8 +50,8 @@ for i in range(0, 8):
     MAXLAT_2 = round(MAXLAT2 + i * addedlat, 4)
     print('start collecting map%d  ...' %(i+1))
     print(MINLON_2, MINLAT_2, MAXLON_2, MAXLAT_2)
-    # map2 = MyApi.Map(MINLON_2, MINLAT_2, MAXLON_2, MAXLAT_2)
-    # map0.extend(map2)
+    map2 = MyApi.Map(MINLON_2, MINLAT_2, MAXLON_2, MAXLAT_2)
+    map0.extend(map2)
     if MAXLAT_2 >= MAXLAT:
         MAXLAT = MAXLAT_2
     if MINLAT_2 <= MINLAT:
