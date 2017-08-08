@@ -5,7 +5,7 @@ from descartes import PolygonPatch
 from figures import SIZE, BLUE, GRAY, RED, set_limits, plot_line
 import json
 MyApi = OsmApi()
-types = ['motorway', 'trunk', 'primary', 'secondary','trunk_link', 'motorway_link', 'primary_link', 'tertiary_link', 'traffic_signals', 'bus_stop']
+types = ['motorway', 'trunk', 'primary', 'secondary','trunk_link', 'motorway_link', 'primary_link', 'secondary_link', 'traffic_signals', 'bus_stop']
 
 MINLON0 = 116.1900
 MINLAT0 = 39.9837
@@ -200,6 +200,17 @@ patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)
 print ('eroded done!')
 print ('start ploting...')
+
+print ('saving as json...')
+holedict = {}
+for i in range(0, len(polygon['coordinates'])):
+    holedict[i] = polygon['coordinates'][i]
+jsObj = json.dumps(holedict)
+fileobject = open('jsonFile.json', 'w')
+fileobject.write(jsObj)
+fileobject.close()
+print('saving end!')
+
 set_limits(ax1, 116,119,39,42)
 pyplot.show()
 
