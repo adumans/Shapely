@@ -85,7 +85,7 @@ set_limits(ax, -1, 15, -1, 5)
 
 # 4
 ax = fig.add_subplot(224)
-polygon3 = Polygon(polygon['coordinates'][1])
+polygon3 = Polygon(polygon['coordinates'][2])
 patch3 = PolygonPatch(polygon3, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
 ax.add_patch(patch3)
 ax.set_title('d) erosion[interiors]')
