@@ -4,9 +4,11 @@ from shapely.geometry import LineString ,Polygon
 from descartes import PolygonPatch
 from figures import SIZE, BLUE, GRAY, RED, set_limits, plot_line
 import json
+import time
+time1 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 MyApi = OsmApi()
-types = ['motorway', 'trunk', 'primary', 'secondary','trunk_link', 'motorway_link', 'primary_link', 'secondary_link', 'traffic_signals', 'bus_stop']
-
+RoadTypes = ['motorway', 'trunk', 'primary', 'secondary', 'secondary_link', 'trunk_link', 'motorway_link', 'primary_link', 'traffic_signals', 'bus_stop']
+RailTypes = ['rail']
 MINLON0 = 116.1900
 MINLAT0 = 39.9837
 MAXLON0 = 116.3874
@@ -62,51 +64,6 @@ for i in range(0, 8):
         MINLON = MINLON_2
 
 
-
-
-
-
-# MINLON1 = 116.3874
-# MINLAT1 = 39.9837
-# MAXLON1 = 116.5615
-# MAXLAT1 = 40.0281
-#
-# MINLON2 = 116.1900
-# MINLAT2 = 39.9396
-# MAXLON2 = 116.3874
-# MAXLAT2 = 39.9837
-#
-# MINLON3 = 116.3874
-# MINLAT3 = 39.9396
-# MAXLON3 = 116.5701
-# MAXLAT3 = 39.9837
-#
-# MINLON = min(MINLON0, MINLON1, MINLON2, MINLON3)
-# MINLAT = min(MINLAT0, MINLAT1, MINLAT2, MINLAT3)
-# MAXLON = max(MAXLON0, MAXLON1, MAXLON2, MAXLON3)
-# MAXLAT = max(MAXLAT0, MAXLAT1, MAXLAT2, MAXLAT3)
-
-# MINLON = 116.3666
-# MINLAT = 39.9623
-# MAXLON = 116.4469
-# MAXLAT = 39.9937
-# print ('start collecting map0 ...')
-# map0 = MyApi.Map(MINLON0, MINLAT0, MAXLON0, MAXLAT0)
-# print ('start collecting map1 ...')
-# map1 = MyApi.Map(MINLON1, MINLAT1, MAXLON1, MAXLAT1)
-# print ('start collecting map2 ...')
-# map2 = MyApi.Map(MINLON2, MINLAT2, MAXLON2, MAXLAT2)
-# print ('start collecting map3 ...')
-# map3 = MyApi.Map(MINLON3, MINLAT3, MAXLON3, MAXLAT3)
-#
-# print ('merge ...')
-# map0.extend(map1)
-# map0.extend(map2)
-# map0.extend(map3)
-#map0 = MyApi.Map(116.34384,39.98189,116.34691,39.98352)
-#print (type(map0))
-#for d in map0:
- #   json.dump(d,open('map_dict', 'w'))
 print ('collecting ends!')
 print ('start data processing...')
 nodesinfo = {}
@@ -120,7 +77,7 @@ for item in map0:
         nid = str(nid)
         nodesinfo[nid] = [item['data']['lat'], item['data']['lon']]
         if 'highway' in item['data']['tag']:
-            if item['data']['tag']['highway'] in types:
+            if item['data']['tag']['highway'] in RoadTypes:
                 nodeselected.append(str(nid))
                 nodeselected.append(item['data']['tag']['highway'])
     if item['type'] == 'way':
@@ -129,7 +86,7 @@ for item in map0:
         nodeslocation = []
         oneway['wayid'] = item['data']['id']
         if 'highway' in item['data']['tag']:
-            if item['data']['tag']['highway'] in types:
+            if item['data']['tag']['highway'] in RoadTypes:
                 wayselected.append(str(oneway['wayid']))
                 wayselected.append(item['data']['tag']['highway'])
                 for nodeid in item['data']['nd']:
@@ -156,6 +113,36 @@ for item in map0:
                 nodeslocation = tuple(nodeslocation)
                 oneway['nodeslocation'] = nodeslocation
                 waylist.append(oneway)
+
+        # if 'railway' in item['data']['tag']:
+        #     if item['data']['tag']['railway'] in RailTypes:
+        #         wayselected.append(str(oneway['wayid']))
+        #         wayselected.append(item['data']['tag']['railway'])
+        #         for nodeid in item['data']['nd']:
+        #             strid = str(nodeid)
+        #             nodexy = [0.0, 0.0]
+        #             # if nodesinfo[strid][0] >= MINLAT and nodesinfo[strid][0] <= MAXLAT and nodesinfo[strid][1] >= MINLON and nodesinfo[strid][1] <= MAXLON:
+        #             nodeids.append(nodeid)
+        #             # if MyApi.NodeGet(nodeid)['tag']
+        #             nodexy[0] = nodesinfo[strid][1]
+        #             nodexy[1] = nodesinfo[strid][0]
+        #             nodexy = tuple(nodexy)
+        #             nodeslocation.append(nodexy)
+        #
+        #             if nodexy[1] >= MAXLAT:
+        #                 MAXLAT = nodexy[1]
+        #             if nodexy[1] <= MINLAT:
+        #                 MINLAT = nodexy[1]
+        #             if nodexy[0] >= MAXLON:
+        #                 MAXLON = nodexy[0]
+        #             if nodexy[0] <= MINLON:
+        #                 MINLON = nodexy[0]
+        #
+        #         oneway['nodeids'] = nodeids
+        #         nodeslocation = tuple(nodeslocation)
+        #         oneway['nodeslocation'] = nodeslocation
+        #         waylist.append(oneway)
+
 print ('data processing end!')
 #plot
 fig = pyplot.figure(1, figsize=SIZE, dpi=150)
@@ -163,18 +150,18 @@ ax0 = fig.add_subplot(121)
 #dilatedAll = Polygon()
 
 line1 = LineString([(MINLON,MINLAT),(MINLON,MAXLAT)])
-dilatedAll = line1.buffer(0.0003, cap_style=3)
+dilatedAll = line1.buffer(0.0015, cap_style=3)
 plot_line(ax0, line1)
 line2 = LineString([(MINLON,MAXLAT),(MAXLON,MAXLAT)])
-dilated = line2.buffer(0.0003, cap_style=3)
+dilated = line2.buffer(0.0015, cap_style=3)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line2)
 line3 = LineString([(MAXLON,MAXLAT),(MAXLON,MINLAT)])
-dilated = line3.buffer(0.0003, cap_style=3)
+dilated = line3.buffer(0.0015, cap_style=3)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line3)
 line4 = LineString([(MINLON,MINLAT),(MAXLON,MINLAT)])
-dilated = line4.buffer(0.0003, cap_style=3)
+dilated = line4.buffer(0.0015, cap_style=3)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line4)
 
@@ -186,7 +173,7 @@ for oneway in waylist:
     if str(oneway['wayid']) in wayselected:
         points = oneway['nodeslocation']
         line = LineString(points)
-        dilated = line.buffer(0.0009, cap_style=3)
+        dilated = line.buffer(0.0015, cap_style=3)
         dilatedAll = dilatedAll.union(dilated)
         plot_line(ax0, line)
 patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
@@ -194,7 +181,7 @@ patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
 print ('dilation done!')
 
 ax1 = fig.add_subplot(122)
-eroded = dilatedAll.buffer(-0.00000001)
+eroded = dilatedAll.buffer(-0.0014)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)
@@ -211,10 +198,16 @@ fileobject.write(jsObj)
 fileobject.close()
 print('saving end!')
 
+time2 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+print (time1)
+print (time2)
+
 set_limits(ax1, 116,119,39,42)
 pyplot.show()
 
 print ('all done !')
+
+
 # for d in waylist:
 #     f= open('map_dict', 'a')
 #     json.dump(d,f)
