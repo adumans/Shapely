@@ -12,7 +12,7 @@ def load(filename):
 
 if __name__ == "__main__":
     filename0 = 'jsonFileTest0.json'
-    filename1 = 'jsonFile-8types.json'
+    filename1 = 'jsonFile-8types-0.0014999.json'
     data0 = load(filename0)
     data1 = load(filename1)
     # tuple0 = listTotuple(data1['0'][0])

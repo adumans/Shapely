@@ -1,5 +1,7 @@
 from osmapi import OsmApi
 from matplotlib import pyplot
+import matplotlib
+matplotlib.use('Agg')
 from shapely.geometry import LineString ,Polygon
 from descartes import PolygonPatch
 from figures import SIZE, BLUE, GRAY, RED, set_limits, plot_line
@@ -136,7 +138,7 @@ ax0.add_patch(patch)
 print ('dilation done!')
 #2
 ax1 = fig.add_subplot(222)
-eroded = dilatedAll.buffer(-0.0014)
+eroded = dilatedAll.buffer(-0.0014999)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)
