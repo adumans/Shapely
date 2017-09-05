@@ -53,6 +53,7 @@ if __name__ == "__main__":
     ax = fig.add_subplot(122)
     for i in range(1, holenums):
         tuple1 = listTotuple(data1['0'][i])
+        ax.annotate(str(i), xy=tuple1[0], xytext= tuple1[30], arrowprops=dict(facecolor='red', shrink=0.1), )
         polygon1 = Polygon(tuple1)
         if i%6 ==0:
             patch1 = PolygonPatch(polygon1, fc=BLUE, ec=WHITE, alpha=0.5, zorder=2)
