@@ -1,5 +1,5 @@
 from matplotlib import pyplot
-from shapely.geometry import LineString ,Polygon
+from shapely.geometry import LineString ,Polygon, Point
 from descartes import PolygonPatch
 from docs.code.figures import SIZE, BLUE, GRAY, RED, GREEN, BLACK, YELLOW, WHITE, set_limits, plot_line
 import json
@@ -53,8 +53,17 @@ if __name__ == "__main__":
     ax = fig.add_subplot(122)
     for i in range(1, holenums):
         tuple1 = listTotuple(data1['0'][i])
-        ax.annotate(str(i), xy=tuple1[0], xytext= tuple1[30], arrowprops=dict(facecolor='red', shrink=0.1), )
+        #ax.annotate(str(i), xy=tuple1[0], xytext= tuple1[30], arrowprops=dict(facecolor='red', shrink=0.1), )
         polygon1 = Polygon(tuple1)
+        x = 116.386
+        y = 40.0084
+        pyplot.plot(x, y, '*')
+        point0 = Point(x, y)
+        if point0.within(polygon1):
+            print (i)
+        if polygon1.contains(point0):
+            print (i)
+
         if i%6 ==0:
             patch1 = PolygonPatch(polygon1, fc=BLUE, ec=WHITE, alpha=0.5, zorder=2)
         if i%6 ==1:
