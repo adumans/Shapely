@@ -106,19 +106,22 @@ fig = pyplot.figure(1, figsize=SIZE, dpi=150)
 ax0 = fig.add_subplot(221)
 #dilatedAll = Polygon()
 
+epsilon = 0.001
+cap_style = 2
+join_style = 2
 line1 = LineString([(MINLON,MINLAT),(MINLON,MAXLAT)])
-dilatedAll = line1.buffer(0.0015, cap_style=3)
+dilatedAll = line1.buffer(epsilon, cap_style=cap_style, join_style=join_style)
 plot_line(ax0, line1)
 line2 = LineString([(MINLON,MAXLAT),(MAXLON,MAXLAT)])
-dilated = line2.buffer(0.0015, cap_style=3)
+dilated = line2.buffer(epsilon, cap_style=cap_style, join_style=join_style)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line2)
 line3 = LineString([(MAXLON,MAXLAT),(MAXLON,MINLAT)])
-dilated = line3.buffer(0.0015, cap_style=3)
+dilated = line3.buffer(epsilon, cap_style=cap_style, join_style=join_style)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line3)
 line4 = LineString([(MINLON,MINLAT),(MAXLON,MINLAT)])
-dilated = line4.buffer(0.0015, cap_style=3)
+dilated = line4.buffer(epsilon, cap_style=cap_style, join_style=join_style)
 dilatedAll = dilatedAll.union(dilated)
 plot_line(ax0, line4)
 
@@ -130,7 +133,7 @@ for oneway in waylist:
     if str(oneway['wayid']) in wayselected:
         points = oneway['nodeslocation']
         line = LineString(points)
-        dilated = line.buffer(0.0015, cap_style=3)
+        dilated = line.buffer(epsilon, cap_style=cap_style, join_style=join_style)
         dilatedAll = dilatedAll.union(dilated)
         plot_line(ax0, line)
 patch = PolygonPatch(dilatedAll, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
@@ -138,7 +141,8 @@ ax0.add_patch(patch)
 print ('dilation done!')
 #2
 ax1 = fig.add_subplot(222)
-eroded = dilatedAll.buffer(-0.0014999)
+eroded = dilatedAll.buffer(-0.0009999, cap_style=cap_style, join_style=join_style)
+# eroded = dilatedAll.buffer(-0.00149)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)

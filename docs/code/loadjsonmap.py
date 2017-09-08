@@ -10,7 +10,7 @@ def load(filename):
         data = json.load(json_file)
         return data
 
-if __name__ == "__main__":
+def loadjson():
     filename0 = 'jsonFileTest0.json'
     filename1 = 'jsonFile-8types-0.0014999.json'
     data0 = load(filename0)
@@ -55,8 +55,8 @@ if __name__ == "__main__":
         tuple1 = listTotuple(data1['0'][i])
         #ax.annotate(str(i), xy=tuple1[0], xytext= tuple1[30], arrowprops=dict(facecolor='red', shrink=0.1), )
         polygon1 = Polygon(tuple1)
-        x = 116.386
-        y = 40.0084
+        x = 116.30754
+        y = 39.89570
         pyplot.plot(x, y, '*')
         point0 = Point(x, y)
         if point0.within(polygon1):
@@ -85,7 +85,9 @@ if __name__ == "__main__":
     #     ax.add_patch(patch1)
 
     ax.set_title('result')
-    set_limits(ax, 116, 119, 39, 42)
+    set_limits(ax, 116, 117, 39, 41)
 
     pyplot.show()
    # print (data1['0'])
+if __name__ == "__main__":
+    loadjson()
