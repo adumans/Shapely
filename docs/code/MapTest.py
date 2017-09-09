@@ -12,10 +12,10 @@ MyApi = OsmApi()
 
 RoadTypes = ['motorway', 'trunk', 'primary','trunk_link', 'motorway_link', 'primary_link', 'secondary', 'secondary_link','traffic_signals', 'bus_stop']
 RailTypes = ['rail']
-MINLON = 116.3255
-MINLAT = 39.9739
-MAXLON = 116.3494
-MAXLAT = 39.9858
+MINLON = 116.3651
+MINLAT = 39.9979
+MAXLON = 116.4158
+MAXLAT = 40.0242
 map0 = MyApi.Map(MINLON, MINLAT, MAXLON, MAXLAT)
 
 
@@ -106,9 +106,9 @@ fig = pyplot.figure(1, figsize=SIZE, dpi=150)
 ax0 = fig.add_subplot(221)
 #dilatedAll = Polygon()
 
-epsilon = 0.001
-cap_style = 2
-join_style = 2
+epsilon = 0.00075
+cap_style = 3
+join_style = 3
 line1 = LineString([(MINLON,MINLAT),(MINLON,MAXLAT)])
 dilatedAll = line1.buffer(epsilon, cap_style=cap_style, join_style=join_style)
 plot_line(ax0, line1)
@@ -141,7 +141,7 @@ ax0.add_patch(patch)
 print ('dilation done!')
 #2
 ax1 = fig.add_subplot(222)
-eroded = dilatedAll.buffer(-0.0009999, cap_style=cap_style, join_style=join_style)
+eroded = dilatedAll.buffer(-0.00072, cap_style=cap_style, join_style=2)
 # eroded = dilatedAll.buffer(-0.00149)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)

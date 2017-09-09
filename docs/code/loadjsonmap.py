@@ -1,5 +1,6 @@
 from matplotlib import pyplot
 from shapely.geometry import LineString ,Polygon, Point
+from shapely.geometry import MultiPolygon
 from descartes import PolygonPatch
 from docs.code.figures import SIZE, BLUE, GRAY, RED, GREEN, BLACK, YELLOW, WHITE, set_limits, plot_line
 import json
@@ -10,9 +11,38 @@ def load(filename):
         data = json.load(json_file)
         return data
 
+def pointInWhichPolygon(point, polygonsList):
+    is_find = False
+    num =0
+    for i in range(1,len(polygonsList)):
+        tuple1 = listTotuple(polygonsList[i])
+        polygon1 = Polygon(tuple1)
+        if point.within(polygon1):
+            num =i
+            is_find= True
+            break
+    if is_find:
+        return num
+    else:
+        fatpoint = point.buffer(0.0001)
+        for i in range(1, len(polygonsList)):
+            tuple1 = listTotuple(polygonsList[i])
+            polygon1 = Polygon(tuple1)
+            if MultiPolygon([fatpoint, polygon1]).is_valid == False:
+                num = i
+                is_find = True
+                break
+        if is_find:
+            return num
+        else:
+            return None
+
+
+
+
 def loadjson():
     filename0 = 'jsonFileTest0.json'
-    filename1 = 'jsonFile-8types-0.0014999.json'
+    filename1 = 'jsonFile-joinstyle.json'
     data0 = load(filename0)
     data1 = load(filename1)
     # tuple0 = listTotuple(data1['0'][0])
@@ -57,12 +87,15 @@ def loadjson():
         polygon1 = Polygon(tuple1)
         x = 116.30754
         y = 39.89570
-        pyplot.plot(x, y, '*')
+        #pyplot.plot(x, y, '*')
         point0 = Point(x, y)
-        if point0.within(polygon1):
-            print (i)
-        if polygon1.contains(point0):
-            print (i)
+        a0 = point0.buffer(0.0001)
+        patch1 = PolygonPatch(a0, fc=BLUE, ec=BLUE, alpha=0.5, zorder=2)
+        ax.add_patch(patch1)
+        # if point0.within(polygon1):
+        #     print (i)
+        # if polygon1.contains(point0):
+        #     print (i)
 
         if i%6 ==0:
             patch1 = PolygonPatch(polygon1, fc=BLUE, ec=WHITE, alpha=0.5, zorder=2)
@@ -90,4 +123,14 @@ def loadjson():
     pyplot.show()
    # print (data1['0'])
 if __name__ == "__main__":
-    loadjson()
+    #loadjson()
+    # x = 116.312
+    # y = 39.8924
+    x = 116.30754
+    y = 39.89570
+    point0 = Point(x, y)
+    filename1 = 'jsonFile-8types-0.0014999.json'
+    data1 = load(filename1)
+    num = pointInWhichPolygon(point0, data1['0'])
+    print (num)
+
