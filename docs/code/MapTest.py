@@ -12,10 +12,10 @@ MyApi = OsmApi()
 
 RoadTypes = ['motorway', 'trunk', 'primary','trunk_link', 'motorway_link', 'primary_link', 'secondary', 'secondary_link','traffic_signals', 'bus_stop']
 RailTypes = ['rail']
-MINLON = 116.3651
-MINLAT = 39.9979
-MAXLON = 116.4158
-MAXLAT = 40.0242
+MINLON = 116.4081
+MINLAT = 39.8896
+MAXLON = 116.4461
+MAXLAT = 39.9151
 map0 = MyApi.Map(MINLON, MINLAT, MAXLON, MAXLAT)
 
 
@@ -70,34 +70,34 @@ for item in map0:
                 nodeslocation = tuple(nodeslocation)
                 oneway['nodeslocation'] = nodeslocation
                 waylist.append(oneway)
-        if 'railway' in item['data']['tag']:
-            if item['data']['tag']['railway'] in RailTypes:
-                wayselected.append(str(oneway['wayid']))
-                wayselected.append(item['data']['tag']['railway'])
-                for nodeid in item['data']['nd']:
-                    strid = str(nodeid)
-                    nodexy = [0.0, 0.0]
-                    # if nodesinfo[strid][0] >= MINLAT and nodesinfo[strid][0] <= MAXLAT and nodesinfo[strid][1] >= MINLON and nodesinfo[strid][1] <= MAXLON:
-                    nodeids.append(nodeid)
-                    # if MyApi.NodeGet(nodeid)['tag']
-                    nodexy[0] = nodesinfo[strid][1]
-                    nodexy[1] = nodesinfo[strid][0]
-                    nodexy = tuple(nodexy)
-                    nodeslocation.append(nodexy)
+        #if 'railway' in item['data']['tag']:
+         #   if item['data']['tag']['railway'] in RailTypes:
+          #      wayselected.append(str(oneway['wayid']))
+           #     wayselected.append(item['data']['tag']['railway'])
+            #    for nodeid in item['data']['nd']:
+             #       strid = str(nodeid)
+              #      nodexy = [0.0, 0.0]
+               #     # if nodesinfo[strid][0] >= MINLAT and nodesinfo[strid][0] <= MAXLAT and nodesinfo[strid][1] >= MINLON and nodesinfo[strid][1] <= MAXLON:
+                #    nodeids.append(nodeid)
+                 #   # if MyApi.NodeGet(nodeid)['tag']
+                  #  nodexy[0] = nodesinfo[strid][1]
+                   # nodexy[1] = nodesinfo[strid][0]
+                    #nodexy = tuple(nodexy)
+                    #nodeslocation.append(nodexy)
 
-                    if nodexy[1] >= MAXLAT:
-                        MAXLAT = nodexy[1]
-                    if nodexy[1] <= MINLAT:
-                        MINLAT = nodexy[1]
-                    if nodexy[0] >= MAXLON:
-                        MAXLON = nodexy[0]
-                    if nodexy[0] <= MINLON:
-                        MINLON = nodexy[0]
+                    #if nodexy[1] >= MAXLAT:
+                     #   MAXLAT = nodexy[1]
+                    #if nodexy[1] <= MINLAT:
+                     #   MINLAT = nodexy[1]
+                    #if nodexy[0] >= MAXLON:
+                     #   MAXLON = nodexy[0]
+                    #if nodexy[0] <= MINLON:
+                     #   MINLON = nodexy[0]
 
-                oneway['nodeids'] = nodeids
-                nodeslocation = tuple(nodeslocation)
-                oneway['nodeslocation'] = nodeslocation
-                waylist.append(oneway)
+#                oneway['nodeids'] = nodeids
+ #               nodeslocation = tuple(nodeslocation)
+  #              oneway['nodeslocation'] = nodeslocation
+   #             waylist.append(oneway)
 
 print ('data processing end!')
 #plot
@@ -106,7 +106,7 @@ fig = pyplot.figure(1, figsize=SIZE, dpi=150)
 ax0 = fig.add_subplot(221)
 #dilatedAll = Polygon()
 
-epsilon = 0.00075
+epsilon = 0.001
 cap_style = 3
 join_style = 3
 line1 = LineString([(MINLON,MINLAT),(MINLON,MAXLAT)])
@@ -141,11 +141,14 @@ ax0.add_patch(patch)
 print ('dilation done!')
 #2
 ax1 = fig.add_subplot(222)
-eroded = dilatedAll.buffer(-0.00072, cap_style=cap_style, join_style=2)
+erodedn= -0.0002
+eroded = dilatedAll.buffer(erodedn, cap_style=cap_style, join_style=2)
+eroded = eroded.buffer(-0.00075, cap_style=cap_style, join_style=1)
 # eroded = dilatedAll.buffer(-0.00149)
 polygon = eroded.__geo_interface__
 patch2 = PolygonPatch(polygon, fc=BLUE, ec=RED, alpha=0.5, zorder=1)
 ax1.add_patch(patch2)
+ax1.set_title(erodedn)
 print ('eroded done!')
 print ('start ploting...')
 
